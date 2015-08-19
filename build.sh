@@ -54,7 +54,7 @@ cat >Dockerfile <<-EOF
 	ENV GOPATH="/opt/gopkg"
 	ENV GOROOT="/opt/go"
 	ENV PATH=\$PATH:\$GOPATH/bin:\$GOROOT/bin
-	RUN ( \
+	RUN ( \\
 	  groupadd -g ${gid} docker && \\
 	  gpasswd -a jenkins docker && \\
 	  wget -O /usr/local/bin/docker ${dockerurl} && \\
