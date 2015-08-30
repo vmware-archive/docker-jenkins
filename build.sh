@@ -47,9 +47,15 @@ cat >Dockerfile <<-EOF
 	#
 	FROM jenkins
 	MAINTAINER VMware, Inc.
-	COPY plugins.txt /usr/share/jenkins/plugins.txt
-	RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 	USER root
+	RUN apt-get update
+	RUN apt-get install -y build-essential
+	RUN apt-get install -y python-dev
+	RUN ( \\
+		  wget https://bootstrap.pypa.io/ez_setup.py -O - | python && \\
+		  easy_install pip && \\
+		  for i in openstack glance heat neutron nova; do pip install python-\${i}client; done \\
+	)
 	RUN mkdir /opt/gopkg
 	ENV GOPATH="/opt/gopkg"
 	ENV GOROOT="/opt/go"
@@ -67,6 +73,8 @@ cat >Dockerfile <<-EOF
 		  rm -f go.tar.gz \\
 	)
 	USER jenkins
+	COPY plugins.txt /usr/share/jenkins/plugins.txt
+	RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 EOF
 
 # build the container itself
