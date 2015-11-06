@@ -72,6 +72,8 @@ cat >Dockerfile <<-EOF
 		  tar -xf /tmp/go.tar.gz && \\
 		  rm -f go.tar.gz \\
 	)
+	ADD https://storage.googleapis.com/git-repo-downloads/repo /usr/local/bin/repo
+	RUN chmod +x /usr/local/bin/repo
 	USER jenkins
 	COPY plugins.txt /usr/share/jenkins/plugins.txt
 	RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
